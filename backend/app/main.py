@@ -1,18 +1,14 @@
 from fastapi import FastAPI
 
-app = FastAPI(
-    title="The Lenny Growth Assistant",
-    version="1.0.0"
-)
+from app.api.session import router as session_router
+from app.api.message import router as message_router
+
+app = FastAPI(title="Lenny Growth Assistant")
+
+app.include_router(session_router)
+app.include_router(message_router)
+
 
 @app.get("/")
 def root():
-    return {
-        "message": "Lenny Growth Assistant API is running 🚀"
-    }
-
-@app.get("/health")
-def health():
-    return {
-        "status": "healthy"
-    }
+    return {"message": "Lenny Growth Assistant API is running!"}
