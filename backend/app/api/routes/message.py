@@ -6,7 +6,7 @@ from app.crud.message import create_message
 from app.schemas.message import MessageCreate, MessageResponse
 
 router = APIRouter(
-    prefix="/sessions",
+    prefix="/messages",
     tags=["Messages"],
 )
 
