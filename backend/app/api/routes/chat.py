@@ -1,13 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-import logging
-import traceback
+
+from app.database.session import get_db
 
 from app.crud.chat import chat
-from app.database.session import get_db
-from app.schemas.chat import ChatRequest, ChatResponse
 
-logger = logging.getLogger(__name__)
+from app.schemas.chat import (
+    ChatRequest,
+    ChatResponse,
+)
 
 router = APIRouter(
     prefix="/chat",
@@ -19,16 +20,11 @@ router = APIRouter(
     "/",
     response_model=ChatResponse,
 )
-def chat_with_ai(
+def chat_endpoint(
     request: ChatRequest,
     db: Session = Depends(get_db),
 ):
-    try:
-        return chat(db, request)
-    except Exception as e:
-        error_msg = f"Error in chat endpoint: {str(e)}"
-        logger.error(f"{error_msg}\n{traceback.format_exc()}")
-        raise HTTPException(
-            status_code=500,
-            detail=error_msg,
-        )
+    return chat(
+        db=db,
+        request=request,
+    )
