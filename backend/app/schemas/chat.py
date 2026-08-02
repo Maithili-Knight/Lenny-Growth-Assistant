@@ -4,8 +4,11 @@ from pydantic import BaseModel
 
 
 class ChatRequest(BaseModel):
-    session_id: int
-    prompt: str
+    message: str
+    system_prompt: Optional[str] = None
+    session_id: Optional[int] = None
+    prompt: Optional[str] = None
+    llm_provider: Optional[str] = None
 
 
 class ChatResponse(BaseModel):

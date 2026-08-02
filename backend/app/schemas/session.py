@@ -13,6 +13,14 @@ class SessionCreate(BaseModel):
     pass
 
 
+class SessionUpdate(BaseModel):
+    """
+    Data received from the frontend
+    when renaming a chat session.
+    """
+    title: str
+
+
 class SessionResponse(BaseModel):
     """
     Data returned to the frontend.
