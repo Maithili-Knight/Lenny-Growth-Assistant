@@ -39,3 +39,17 @@ build/
 # Coverage
 .coverage
 htmlcov/
+
+# Database & ChromaDB
+chroma_db/
+**/chroma_db/
+
+# Large binary files & Model weights
+*.pkl
+*.safetensors
+*.bin
+models/
+**/models/
+
+# Nested podcast transcripts
+lennys-podcast-transcripts/
