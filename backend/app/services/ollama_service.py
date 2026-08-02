@@ -1,6 +1,7 @@
 import ollama
 from ollama import Client
 from app.core.config import settings
+import json
 
 # Initialize Ollama client with host setting
 client = Client(host=settings.ollama_base_url)
@@ -58,3 +59,31 @@ Answer:
 """
 
     return generate_response(prompt)
+
+def generate_artifact(
+    artifact_type: str,
+    prompt: str,
+):
+    full_prompt = f"""
+You are an AI assistant.
+
+Generate a {artifact_type}.
+
+Return ONLY valid JSON.
+
+Format:
+
+{{
+    "title": "...",
+    "type": "{artifact_type}",
+    "content": "..."
+}}
+
+User Request:
+
+{prompt}
+"""
+
+    response = generate_response(full_prompt)
+
+    return json.loads(response)

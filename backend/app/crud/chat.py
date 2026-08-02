@@ -4,6 +4,10 @@ from app.schemas.chat import ChatRequest
 from app.services.retriever import retrieve_context
 from app.services.ollama_service import generate_rag_response
 
+from app.crud.artifact import create_artifact
+from app.schemas.artifact import ArtifactCreate
+from app.services.ollama_service import generate_artifact
+
 from app.crud.message import (
     create_message,
     get_session_messages,
@@ -66,7 +70,39 @@ def chat(
             content=answer,
         ),
     )
+    artifact_id = None
+
+    artifact_keywords = [
+        "summarize",
+        "summary",
+        "meeting notes",
+        "action items",
+        "todo",
+        "to-do",
+        "report",
+        "blog",
+        "notes",
+    ]
+
+    if any(keyword in request.prompt.lower() for keyword in artifact_keywords):
+        artifact = generate_artifact(
+            artifact_type="summary",
+            prompt=request.prompt,
+        )
+
+        saved_artifact = create_artifact(
+            db=db,
+            artifact=ArtifactCreate(
+                session_id=request.session_id,
+                type=artifact["type"],
+                title=artifact["title"],
+                content=artifact["content"],
+            ),
+        )
+
+        artifact_id = saved_artifact.id
 
     return {
-        "response": answer
+        "response": answer,
+        "artifact_id": artifact_id,
     }
